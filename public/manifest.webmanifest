@@ -1,0 +1,17 @@
+{
+  "name": "Honya — Manga & Bookshop",
+  "short_name": "Honya",
+  "description": "A harbour bookshop for manga, novels and books from every shore.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ECE3CE",
+  "theme_color": "#0F2847",
+  "icons": [
+    {
+      "src": "/honya-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link as RouterLink, useParams } from "react-router";
+import { Link as RouterLink, useNavigate, useParams } from "react-router";
 import Box from "@mui/material/Box";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Button from "@mui/material/Button";
@@ -13,6 +13,8 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import { BookCard, BookCover } from "../shared/components";
 import { useProduct } from "../hooks";
+import { useAuth } from "../contexts/AuthContext";
+import { useCart } from "../contexts/CartContext";
 import {
   AVAILABILITY_LABEL,
   KIND_LABEL,
@@ -60,6 +62,11 @@ export default function ProductDetailPage() {
 
 function ProductDetail({ book, related }: { book: Book; related: Book[] }) {
   const [qty, setQty] = useState(1);
+  const nav = useNavigate();
+  const { user } = useAuth();
+  const { addItem } = useCart();
+  const [adding, setAdding] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
 
   useEffect(() => {
     setQty(1);
@@ -68,6 +75,23 @@ function ProductDetail({ book, related }: { book: Book; related: Book[] }) {
   const max = Math.max(book.stock, 1);
   const soldOut = book.stock === 0;
   const clamp = (n: number) => Math.min(Math.max(n, 1), max);
+
+  const handleAdd = async () => {
+    if (!user) {
+      nav("/login");
+      return;
+    }
+    setAdding(true);
+    setNotice(null);
+    try {
+      await addItem(book.id, qty);
+      setNotice(`Added ${qty} ${qty === 1 ? "copy" : "copies"} to your basket.`);
+    } catch (err) {
+      setNotice(err instanceof Error ? err.message : "Could not add to basket.");
+    } finally {
+      setAdding(false);
+    }
+  };
 
   const colophon: Array<[string, string]> = [];
   if (book.isbn) colophon.push(["ISBN", book.isbn]);
@@ -191,8 +215,14 @@ function ProductDetail({ book, related }: { book: Book; related: Book[] }) {
               </Box>
               <Box sx={{ display: "flex", gap: 1, flexDirection: { xs: "column", sm: "row" } }}>
                 <Button variant="outlined" sx={{ color: "#F7F2E6", borderColor: "rgba(247,242,230,0.4)" }} disabled={soldOut}>Reserve</Button>
-                <Button variant="contained" color="secondary" startIcon={<ShoppingBasketIcon />} disabled={soldOut}>
-                  {soldOut ? "Sold out" : `Add ${qty} to basket`}
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  startIcon={<ShoppingBasketIcon />}
+                  disabled={soldOut || adding}
+                  onClick={handleAdd}
+                >
+                  {soldOut ? "Sold out" : adding ? "Adding…" : `Add ${qty} to basket`}
                 </Button>
               </Box>
             </Box>
@@ -200,6 +230,11 @@ function ProductDetail({ book, related }: { book: Book; related: Book[] }) {
           <Typography variant="caption" sx={{ display: "block", mt: 1.5, opacity: 0.65 }}>
             Wrapped in washi + twine. Dummy checkout — no charge, only stamps.
           </Typography>
+          {notice && (
+            <Typography variant="body2" role="status" sx={{ mt: 1 }}>
+              {notice}
+            </Typography>
+          )}
         </Box>
       </Box>
 

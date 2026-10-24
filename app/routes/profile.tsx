@@ -1,7 +1,7 @@
 import { ProfilePage } from "../pages";
 
 export function meta() {
-  return [{ title: "My shelf — Honya" }];
+  return [{ title: "My account — Honya" }];
 }
 
 export default function Profile() {

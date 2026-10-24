@@ -7,34 +7,42 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
 import Drawer from "@mui/material/Drawer";
+import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import Popover from "@mui/material/Popover";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import FurinIcon from "./FurinIcon";
 import HonyaMark from "./HonyaMark";
 import { useAuth } from "../../contexts/AuthContext";
+import { useCart } from "../../contexts/CartContext";
 import { dummyNotices } from "../../dummy_data/users";
 
 const NAV = [
   { to: "/", label: "Reading room" },
   { to: "/products", label: "Shelves" },
-  { to: "/profile", label: "My shelf" },
 ];
 
-export default function SiteHeader({ cartCount = 3 }: { cartCount?: number }) {
+export default function SiteHeader() {
   const { pathname, search } = useLocation();
   const current = `${pathname}${search}`;
   const [open, setOpen] = useState(false);
   const [chimeAnchor, setChimeAnchor] = useState<HTMLElement | null>(null);
+  const [accountAnchor, setAccountAnchor] = useState<HTMLElement | null>(null);
   const chimeOpen = Boolean(chimeAnchor);
+  const accountOpen = Boolean(accountAnchor);
   const { user, logout } = useAuth();
+  const { cartCount } = useCart();
 
   return (
     <Box sx={{ position: "sticky", top: 0, zIndex: 50 }}>
@@ -86,7 +94,7 @@ export default function SiteHeader({ cartCount = 3 }: { cartCount?: number }) {
 
             <Box sx={{ ml: "auto", display: "flex", alignItems: "center", gap: 0.5 }}>
               <Typography variant="caption" sx={{ display: { xs: "none", lg: "block" }, opacity: 0.65, letterSpacing: "0.12em", mr: 1 }}>
-                MEMBER HNY-0417
+                {user ? `@${user.username}` : ""}
               </Typography>
               {/* Furin wind-chime notifications — Honya's answer to the bell */}
               <IconButton
@@ -126,18 +134,51 @@ export default function SiteHeader({ cartCount = 3 }: { cartCount?: number }) {
                 </Box>
                 <Box sx={{ p: 2, pt: 0 }}>
                   <Button component={RouterLink} to="/profile" size="small" fullWidth variant="outlined" onClick={() => setChimeAnchor(null)}>
-                    View my shelf
+                    View my account
                   </Button>
                 </Box>
               </Popover>
               {user ? (
-                <Box sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center", gap: 1 }}>
-                  <Button component={RouterLink} to="/profile" size="small" color="inherit">
-                    Hi, {user.display_name || user.username}
+                <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                  <Button
+                    size="small"
+                    color="inherit"
+                    onClick={(event) => setAccountAnchor(event.currentTarget)}
+                    aria-haspopup="menu"
+                    aria-expanded={accountOpen ? "true" : undefined}
+                    startIcon={<AccountCircleIcon fontSize="small" />}
+                    endIcon={<KeyboardArrowDownIcon fontSize="small" />}
+                    sx={{ maxWidth: 220 }}
+                  >
+                    <Box component="span" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      Hi, {user.display_name || user.username}
+                    </Box>
                   </Button>
-                  <Button size="small" color="inherit" onClick={logout}>
-                    Log out
-                  </Button>
+                  <Menu
+                    anchorEl={accountAnchor}
+                    open={accountOpen}
+                    onClose={() => setAccountAnchor(null)}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                    transformOrigin={{ vertical: "top", horizontal: "right" }}
+                    slotProps={{ paper: { sx: { minWidth: 200, mt: 1, bgcolor: "#F7F2E6", border: "1px solid rgba(22,32,46,0.25)" } } }}
+                  >
+                    <MenuItem
+                      component={RouterLink}
+                      to="/profile"
+                      onClick={() => setAccountAnchor(null)}
+                    >
+                      My account
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem
+                      onClick={() => {
+                        setAccountAnchor(null);
+                        logout();
+                      }}
+                    >
+                      Log out
+                    </MenuItem>
+                  </Menu>
                 </Box>
               ) : (
                 <Button component={RouterLink} to="/login" size="small" color="inherit" sx={{ display: { xs: "none", sm: "inline-flex" } }}>
@@ -146,7 +187,7 @@ export default function SiteHeader({ cartCount = 3 }: { cartCount?: number }) {
               )}
               <Button
                 component={RouterLink}
-                to="/profile"
+                to="/cart"
                 size="small"
                 variant="contained"
                 color="secondary"
@@ -170,6 +211,11 @@ export default function SiteHeader({ cartCount = 3 }: { cartCount?: number }) {
                 <ListItemText primary={n.label} />
               </ListItemButton>
             ))}
+            {user ? (
+              <ListItemButton component={RouterLink} to="/profile">
+                <ListItemText primary="My account" />
+              </ListItemButton>
+            ) : null}
             {user ? (
               <ListItemButton onClick={logout}>
                 <ListItemText primary="Log out" />

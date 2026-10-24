@@ -10,6 +10,7 @@ import { ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "./theme";
 import { SiteHeader, SiteFooter } from "./shared/components";
 import { AuthProvider } from "./contexts/AuthContext";
+import { CartProvider } from "./contexts/CartContext";
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -44,9 +45,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <AuthProvider>
-            <SiteHeader />
-            <main style={{ position: "relative", zIndex: 2, minHeight: "70vh" }}>{children}</main>
-            <SiteFooter />
+            <CartProvider>
+              <SiteHeader />
+              <main style={{ position: "relative", zIndex: 2, minHeight: "70vh" }}>{children}</main>
+              <SiteFooter />
+            </CartProvider>
           </AuthProvider>
         </ThemeProvider>
         <ScrollRestoration />

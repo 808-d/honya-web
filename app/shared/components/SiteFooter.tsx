@@ -46,7 +46,7 @@ export default function SiteFooter() {
               ["/products?kind=manhwa", "Manhwa"],
               ["/products?kind=novel", "Novels"],
               ["/products?kind=book", "Books"],
-              ["/profile", "My shelf"],
+              ["/profile", "My account"],
             ].map(([to, label]) => (
               <Box key={label} component={RouterLink} to={to} sx={{ display: "block", color: "inherit", opacity: 0.85, textDecoration: "none", py: 0.4, "&:hover": { opacity: 1 } }}>
                 {label}

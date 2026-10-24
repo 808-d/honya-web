@@ -65,3 +65,29 @@ export interface RegisterDto {
   username: string;
   email: string;
 }
+
+/** CartItemResponse from internal/modules/cart/dto.go. */
+export interface CartItemDto {
+  id: number;
+  cover: string;
+  title: string;
+  quantity: number;
+  create_time: string;
+}
+
+/** CartResponse — the full cart. */
+export interface CartDto {
+  items: CartItemDto[];
+  cart_count: number;
+}
+
+/** CartMutationResponse — returned by add/remove. */
+export interface CartMutationDto {
+  item: CartItemDto;
+  cart_count: number;
+}
+
+export interface AddCartItemInput {
+  product_id: string;
+  quantity: number;
+}

@@ -1,16 +1,27 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useMemo } from "react";
 import { useAuthState } from "../hooks";
+import { usePermissionsState } from "../hooks/use-permissions";
 import type { AuthState } from "../hooks";
+import type { PermissionsState } from "../hooks/use-permissions";
 
-const AuthContext = createContext<AuthState | null>(null);
+export interface AuthContextValue extends AuthState, PermissionsState {}
 
-/** Provides the resolved session (from GET /auth/me) to the whole app. */
+const AuthContext = createContext<AuthContextValue | null>(null);
+
+/** Provides the resolved session and its live feature set to the whole app. */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const auth = useAuthState();
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+  const permissions = usePermissionsState(auth.user?.id ?? null);
+
+  const value = useMemo<AuthContextValue>(
+    () => ({ ...auth, ...permissions }),
+    [auth, permissions],
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-export function useAuth(): AuthState {
+export function useAuth(): AuthContextValue {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("useAuth must be used within <AuthProvider>");
   return ctx;

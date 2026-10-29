@@ -101,7 +101,7 @@ export default function ProductsPage() {
       </Typography>
 
       {source === "shelf" && (
-        <Box sx={{ mt: 2, p: 1.5, border: "1px dashed rgba(22,32,46,0.4)", bgcolor: "#F7F2E6" }}>
+        <Box sx={{ mt: 2, p: 1.5, border: "1px dashed var(--honya-line-strong)", bgcolor: "var(--honya-foam)" }}>
           <Typography variant="caption" sx={{ letterSpacing: "0.15em" }}>
             ⚠ OFFLINE SHELF — honya-api unreachable{error ? ` (${error})` : ""}. Showing local dummy data.
           </Typography>
@@ -137,13 +137,13 @@ export default function ProductsPage() {
           value={q}
           size="small"
           onChange={(e) => update({ q: e.target.value })}
-          sx={{ flex: { xs: "1 1 100%", sm: "1 1 240px" }, maxWidth: { sm: 300 }, bgcolor: "#F7F2E6" }}
+          sx={{ flex: { xs: "1 1 100%", sm: "1 1 240px" }, maxWidth: { sm: 300 }, bgcolor: "background.paper" }}
         />
         <Select
           size="small"
           value={status}
           onChange={(e) => update({ status: e.target.value === "all" ? null : e.target.value })}
-          sx={{ bgcolor: "#F7F2E6", minWidth: 140, flex: { xs: "1 1 auto", sm: "0 auto" } }}
+          sx={{ bgcolor: "background.paper", minWidth: 140, flex: { xs: "1 1 auto", sm: "0 auto" } }}
         >
           <MenuItem value="all">Any status</MenuItem>
           <MenuItem value="active">On sale</MenuItem>
@@ -154,7 +154,7 @@ export default function ProductsPage() {
           size="small"
           value={sort}
           onChange={(e) => setSort(e.target.value as SortKey)}
-          sx={{ bgcolor: "#F7F2E6", minWidth: 140, flex: { xs: "1 1 auto", sm: "0 auto" } }}
+          sx={{ bgcolor: "background.paper", minWidth: 140, flex: { xs: "1 1 auto", sm: "0 auto" } }}
         >
           <MenuItem value="featured">Featured</MenuItem>
           <MenuItem value="price-asc">Price ↑</MenuItem>
@@ -165,7 +165,7 @@ export default function ProductsPage() {
 
       <Box sx={{ display: "grid", gap: 3, mt: 3, gridTemplateColumns: { xs: "1fr", md: "240px 1fr" }, alignItems: "start" }}>
         {/* Sidebar — desktop only */}
-        <Box sx={{ display: { xs: "none", md: "block" }, position: "sticky", top: 110, bgcolor: "#F7F2E6", border: "1px solid rgba(22,32,46,0.2)", p: 2.5 }}>
+        <Box sx={{ display: { xs: "none", md: "block" }, position: "sticky", top: 110, bgcolor: "var(--honya-foam)", border: "1px solid var(--honya-line)", p: 2.5 }}>
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1 }}>
             <Typography variant="subtitle2" sx={{ letterSpacing: "0.2em" }}>絞り込み FILTERS</Typography>
             {hasFilters && <Button size="small" onClick={() => setParams(new URLSearchParams())}>Clear</Button>}
@@ -226,11 +226,11 @@ export default function ProductsPage() {
           {loading ? (
             <Box sx={{ display: "grid", gap: 2.5, gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", lg: "repeat(3, 1fr)" } }}>
               {Array.from({ length: 6 }).map((_, i) => (
-                <Box key={i} sx={{ bgcolor: "#F7F2E6", border: "1px solid rgba(22,32,46,0.2)", height: 380, opacity: 0.7 }} />
+                <Box key={i} sx={{ bgcolor: "var(--honya-foam)", border: "1px solid var(--honya-line)", height: 380, opacity: 0.7 }} />
               ))}
             </Box>
           ) : visible.length === 0 ? (
-            <Box sx={{ p: 4, textAlign: "center", border: "1px dashed rgba(22,32,46,0.4)", bgcolor: "#F7F2E6" }}>
+            <Box sx={{ p: 4, textAlign: "center", border: "1px dashed var(--honya-line-strong)", bgcolor: "var(--honya-foam)" }}>
               <Typography variant="h6">No cards in this drawer.</Typography>
               <Typography variant="body2" color="text.secondary">Widen the price range or clear a filter.</Typography>
               <Box sx={{ display: "flex", gap: 1, justifyContent: "center", mt: 2, flexWrap: "wrap" }}>

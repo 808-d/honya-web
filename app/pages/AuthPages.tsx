@@ -12,7 +12,7 @@ import { useForgotPassword, useRegister, useResetPassword, useVerifyRegister } f
 function CardShell({ kicker, title, jp, children }: { kicker: string; title: string; jp: string; children: React.ReactNode }) {
   return (
     <Container maxWidth="sm" sx={{ py: 7 }}>
-      <Box className="honya-rise" sx={{ bgcolor: "#F7F2E6", border: "1px solid rgba(22,32,46,0.25)", boxShadow: "7px 7px 0 rgba(15,40,71,0.16)" }}>
+      <Box className="honya-rise" sx={{ bgcolor: "var(--honya-foam)", border: "1px solid var(--honya-line-strong)", boxShadow: "7px 7px 0 var(--honya-shadow-strong)" }}>
         <Box className="honya-seigaiha" sx={{ height: 12 }} />
         <Box sx={{ p: { xs: 3, md: 4 } }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1.5 }}>
@@ -42,7 +42,7 @@ function ErrorNote({ children }: { children: React.ReactNode }) {
 
 function SuccessNote({ children }: { children: React.ReactNode }) {
   return (
-    <Box role="status" sx={{ p: 1.5, border: "1px solid rgba(22,32,46,0.3)", bgcolor: "rgba(193,154,91,0.12)" }}>
+    <Box role="status" sx={{ p: 1.5, border: "1px solid var(--honya-line-strong)", bgcolor: "rgba(193,154,91,0.12)" }}>
       <Typography variant="body2">{children}</Typography>
     </Box>
   );

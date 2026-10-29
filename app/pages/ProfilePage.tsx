@@ -55,7 +55,7 @@ export default function ProfilePage() {
 
       <Box sx={{ display: "grid", gap: 2.5, mt: 3, gridTemplateColumns: { xs: "1fr", md: "360px 1fr" } }}>
         {/* Member card — live credentials from GET /auth/me */}
-        <Box sx={{ bgcolor: "#0F2847", color: "#F7F2E6", p: 3, boxShadow: "6px 6px 0 rgba(22,32,46,0.25)", position: "relative", overflow: "hidden" }}>
+        <Box sx={{ bgcolor: "#0F2847", color: "#F7F2E6", p: 3, boxShadow: "6px 6px 0 var(--honya-shadow-strong)", position: "relative", overflow: "hidden" }}>
           <Box className="honya-seigaiha" sx={{ position: "absolute", inset: 0, opacity: 0.35 }} />
           <Box sx={{ position: "relative" }}>
             <Typography variant="caption" sx={{ letterSpacing: "0.3em", opacity: 0.7 }}>貸出カード · HONYA MEMBER</Typography>
@@ -82,7 +82,8 @@ export default function ProfilePage() {
               </Box>
             </Box>
             <Box sx={{ display: "flex", gap: 1, mt: 2, flexWrap: "wrap" }}>
-              <Button component={RouterLink} to="/products" size="small" variant="contained" color="secondary">Browse shelves</Button>
+              <Button component={RouterLink} to="/orders" size="small" variant="contained" color="secondary">My orders</Button>
+              <Button component={RouterLink} to="/products" size="small" variant="outlined" sx={{ color: "#F7F2E6", borderColor: "rgba(247,242,230,0.4)" }}>Browse shelves</Button>
               <Button
                 size="small"
                 variant="outlined"
@@ -97,7 +98,7 @@ export default function ProfilePage() {
 
         {/* Basket + notices */}
         <Box sx={{ display: "grid", gap: 2.5, gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" } }}>
-          <Box sx={{ bgcolor: "#F7F2E6", border: "1px solid rgba(22,32,46,0.2)", p: 2.5 }}>
+          <Box sx={{ bgcolor: "var(--honya-foam)", border: "1px solid var(--honya-line)", p: 2.5 }}>
             <Box sx={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 1 }}>
               <Typography variant="overline">籠 · IN YOUR BASKET</Typography>
               <Typography variant="caption" color="text.secondary">{cartCount}</Typography>
@@ -118,10 +119,17 @@ export default function ProfilePage() {
                 ))}
               </Box>
             )}
-            <Button component={RouterLink} to="/cart" size="small" variant="outlined" sx={{ mt: 1.5 }}>Open basket</Button>
+            <Box sx={{ display: "flex", gap: 1, mt: 1.5, flexWrap: "wrap" }}>
+              <Button component={RouterLink} to="/cart" size="small" variant="outlined">Open basket</Button>
+              {items.length > 0 && (
+                <Button component={RouterLink} to="/checkout" size="small" variant="contained" color="primary">
+                  Checkout
+                </Button>
+              )}
+            </Box>
           </Box>
 
-          <Box className="honya-ruled" sx={{ bgcolor: "#F7F2E6", border: "1px solid rgba(22,32,46,0.2)", p: 2.5 }}>
+          <Box className="honya-ruled" sx={{ bgcolor: "var(--honya-foam)", border: "1px solid var(--honya-line)", p: 2.5 }}>
             <Typography variant="overline">連絡 · COUNTER NOTICES</Typography>
             <Box sx={{ display: "grid", gap: 1.5, mt: 1.5 }}>
               {dummyNotices.map((n) => (
@@ -140,7 +148,7 @@ export default function ProfilePage() {
 
       {/* Account details — straight from the token / MeResponse */}
       <Typography variant="h5" sx={{ mt: 5, mb: 1.5 }}>Account details</Typography>
-      <Box sx={{ bgcolor: "#F7F2E6", border: "1px solid rgba(22,32,46,0.2)" }}>
+      <Box sx={{ bgcolor: "var(--honya-foam)", border: "1px solid var(--honya-line)" }}>
         {details.map(([label, value], index) => (
           <Box
             key={label}
@@ -149,7 +157,7 @@ export default function ProfilePage() {
               gap: 2,
               alignItems: "baseline",
               p: 2,
-              borderTop: index ? "1px dotted rgba(22,32,46,0.25)" : "none",
+              borderTop: index ? "1px dotted var(--honya-line-strong)" : "none",
               flexWrap: "wrap",
             }}
           >

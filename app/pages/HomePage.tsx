@@ -77,7 +77,7 @@ export default function HomePage() {
 
       <Container maxWidth="lg" sx={{ pb: 2, px: { xs: 2, sm: 3 } }}>
         {source === "shelf" && (
-          <Box sx={{ mt: 3, p: 1.5, border: "1px dashed rgba(22,32,46,0.4)", bgcolor: "#F7F2E6", textAlign: "center" }}>
+          <Box sx={{ mt: 3, p: 1.5, border: "1px dashed var(--honya-line-strong)", bgcolor: "var(--honya-foam)", textAlign: "center" }}>
             <Typography variant="caption" sx={{ letterSpacing: "0.15em" }}>
               ⚠ OFFLINE SHELF — honya-api unreachable, showing local dummy data.
             </Typography>
@@ -88,7 +88,7 @@ export default function HomePage() {
         <ShelfRow title="New arrivals" jp="新入荷" books={newArrivals} to="/products" />
 
         {!loading && featured.length === 0 && newArrivals.length === 0 && (
-          <Box sx={{ mt: 6, p: 4, textAlign: "center", border: "1px dashed rgba(22,32,46,0.4)", bgcolor: "#F7F2E6" }}>
+          <Box sx={{ mt: 6, p: 4, textAlign: "center", border: "1px dashed var(--honya-line-strong)", bgcolor: "var(--honya-foam)" }}>
             <Typography variant="h6">The shelves are being restocked.</Typography>
             <Typography variant="body2" color="text.secondary">Add products to honya-api and they’ll appear here.</Typography>
             <Button component={RouterLink} to="/products" sx={{ mt: 2 }} variant="contained">Visit the shelves</Button>
@@ -98,7 +98,7 @@ export default function HomePage() {
         {/* Library card banner */}
         <Box
           className="honya-ruled"
-          sx={{ mt: { xs: 5, md: 7 }, p: { xs: 2.5, md: 4 }, bgcolor: "#F7F2E6", border: "1px solid rgba(22,32,46,0.25)", boxShadow: "6px 6px 0 rgba(15,40,71,0.15)", display: "grid", gap: 2, gridTemplateColumns: { xs: "1fr", md: "1fr auto" }, alignItems: "center" }}
+          sx={{ mt: { xs: 5, md: 7 }, p: { xs: 2.5, md: 4 }, bgcolor: "var(--honya-foam)", border: "1px solid var(--honya-line-strong)", boxShadow: "6px 6px 0 var(--honya-shadow-strong)", display: "grid", gap: 2, gridTemplateColumns: { xs: "1fr", md: "1fr auto" }, alignItems: "center" }}
         >
           <Box>
             <Typography variant="overline" sx={{ letterSpacing: "0.3em" }}>貸出カード · LOAN CARD Nº HNY-0417</Typography>

@@ -91,3 +91,50 @@ export interface AddCartItemInput {
   product_id: string;
   quantity: number;
 }
+
+/** OrderItemResponse from internal/modules/order/dto.go. */
+export interface OrderItemDto {
+  product_id?: string;
+  product_title: string;
+  product_cover: string;
+  unit_price: number;
+  quantity: number;
+  subtotal: number;
+}
+
+/**
+ * OrderResponse. list endpoints omit `items`; detail/checkout include them.
+ * status: 0 pending, 1 confirmed, 2 processing, 3 shipping, 4 completed,
+ *         5 cancelled, 6 refunded.
+ * payment_status: 0 unpaid, 1 paid, 2 failed, 3 refunded.
+ * payment_method: 0 cash on delivery.
+ */
+export interface OrderDto {
+  id: string;
+  status: number;
+  payment_method: number;
+  payment_status: number;
+  subtotal: number;
+  discount_amount: number;
+  shipping_fee: number;
+  total: number;
+  shipping_name: string;
+  shipping_phone: string;
+  shipping_address: string;
+  note: string;
+  coupon_code?: string;
+  paid_at?: string;
+  create_time: string;
+  update_time: string;
+  items?: OrderItemDto[];
+}
+
+/** CreateOrderRequest — checkout uses the server-side cart. */
+export interface CreateOrderInput {
+  shipping_name: string;
+  shipping_phone: string;
+  shipping_address: string;
+  note: string;
+  coupon_code: string;
+  payment_method: number;
+}

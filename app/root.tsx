@@ -5,15 +5,17 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "react-router";
-import { ThemeProvider, CssBaseline } from "@mui/material";
-import theme from "./theme";
 import { SiteHeader, SiteFooter } from "./shared/components";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/CartContext";
+import { ThemeModeProvider } from "./contexts/ThemeContext";
 
 import type { Route } from "./+types/root";
 import "./app.css";
+
+const themeInitScript = `(function(){try{var m=localStorage.getItem("honya-theme-mode");if(m!=="dark"&&m!=="light")m="light";document.documentElement.dataset.theme=m;document.documentElement.style.colorScheme=m;}catch(e){}})();`;
 
 export const links: Route.LinksFunction = () => [
   { rel: "icon", type: "image/svg+xml", href: "/honya-icon.svg" },
@@ -32,26 +34,35 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { pathname } = useLocation();
+  const isAdmin = pathname === "/admin" || pathname.startsWith("/admin/");
+
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0F2847" />
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <Meta />
         <Links />
       </head>
       <body className="honya-grain">
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
+        <ThemeModeProvider>
           <AuthProvider>
             <CartProvider>
-              <SiteHeader />
-              <main style={{ position: "relative", zIndex: 2, minHeight: "70vh" }}>{children}</main>
-              <SiteFooter />
+              {isAdmin ? (
+                children
+              ) : (
+                <>
+                  <SiteHeader />
+                  <main style={{ position: "relative", zIndex: 2, minHeight: "70vh" }}>{children}</main>
+                  <SiteFooter />
+                </>
+              )}
             </CartProvider>
           </AuthProvider>
-        </ThemeProvider>
+        </ThemeModeProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

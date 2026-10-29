@@ -13,6 +13,37 @@
   --honya-vermillion: #b5402a;
   --honya-gold: #c19a5b;
   --honya-wood: #6b4a2f;
+  --honya-line: rgba(22, 32, 46, 0.2);
+  --honya-line-soft: rgba(22, 32, 46, 0.12);
+  --honya-line-strong: rgba(22, 32, 46, 0.3);
+  --honya-shadow: rgba(15, 40, 71, 0.12);
+  --honya-shadow-strong: rgba(15, 40, 71, 0.16);
+  --honya-header: rgba(247, 242, 230, 0.92);
+  --honya-on-dark: #f7f2e6;
+  --honya-rule: rgba(29, 78, 126, 0.18);
+  --honya-stamp-shadow: rgba(22, 32, 46, 0.85);
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --honya-paper: #0b1624;
+  --honya-paper-deep: #08111c;
+  --honya-foam: #16202e;
+  --honya-ink: #f7f2e6;
+  --honya-ink-soft: #b9c3ce;
+  --honya-sea-deep: #08111c;
+  --honya-sea: #1d4e7e;
+  --honya-wave: #5b92bf;
+  --honya-line: rgba(247, 242, 230, 0.18);
+  --honya-line-soft: rgba(247, 242, 230, 0.12);
+  --honya-line-strong: rgba(247, 242, 230, 0.32);
+  --honya-shadow: rgba(0, 0, 0, 0.35);
+  --honya-shadow-strong: rgba(0, 0, 0, 0.5);
+  --honya-header: rgba(22, 32, 46, 0.92);
+  --honya-on-dark: #f7f2e6;
+  --honya-rule: rgba(193, 154, 91, 0.2);
+  --honya-stamp-shadow: rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
 }
 
 html,
@@ -31,6 +62,11 @@ body {
   opacity: 0.5;
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.32 0 0 0 0 0.28 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+[data-theme="dark"] .honya-grain::before {
+  opacity: 0.22;
+  mix-blend-mode: screen;
 }
 
 /* seigaiha wave pattern (concentric arcs) */
@@ -63,15 +99,20 @@ body {
   background-image: repeating-linear-gradient(
     180deg,
     transparent 0 26px,
-    rgba(29, 78, 126, 0.18) 26px 27px
+    var(--honya-rule) 26px 27px
   );
 }
 
 /* hanko stamp */
 .honya-hanko {
-  box-shadow: 2px 2px 0 rgba(22, 32, 46, 0.85);
+  box-shadow: 2px 2px 0 var(--honya-stamp-shadow);
   transform: rotate(-4deg);
 }
+
+/* theme toggle — show the action that the current mode offers */
+.honya-theme-icon-light { display: none; }
+[data-theme="dark"] .honya-theme-icon-dark { display: none; }
+[data-theme="dark"] .honya-theme-icon-light { display: block; }
 
 /* staggered shelf entrance */
 @keyframes honya-rise {

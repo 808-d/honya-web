@@ -66,7 +66,7 @@ export interface AuthState {
   user: UserDto | null;
   loading: boolean;
   login: (input: LoginInput) => Promise<UserDto>;
-  logout: () => void;
+  logout: () => Promise<void>;
   refresh: () => Promise<UserDto | null>;
 }
 
@@ -109,7 +109,14 @@ export function useAuthState(): AuthState {
     return me;
   }, []);
 
-  const logout = useCallback(() => setUser(null), []);
+  const logout = useCallback(async () => {
+    setUser(null);
+    try {
+      await honyaFetch<null>("/auth/logout", { method: "POST" });
+    } catch {
+      /* the cookie may already be gone; the local session is cleared anyway */
+    }
+  }, []);
 
   return { user, loading, login, logout, refresh };
 }

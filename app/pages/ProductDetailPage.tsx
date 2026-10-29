@@ -31,10 +31,10 @@ export default function ProductDetailPage() {
     return (
       <Container maxWidth="lg" sx={{ py: { xs: 3, md: 5 }, px: { xs: 2, sm: 3 } }}>
         <Box sx={{ display: "grid", gap: 4, gridTemplateColumns: { xs: "1fr", md: "380px 1fr" } }}>
-          <Box sx={{ bgcolor: "#F7F2E6", border: "1px solid rgba(22,32,46,0.2)", height: 440 }} />
+          <Box sx={{ bgcolor: "var(--honya-foam)", border: "1px solid var(--honya-line)", height: 440 }} />
           <Box sx={{ display: "grid", gap: 2, alignContent: "start" }}>
             {[60, 320, 200, 140].map((w, i) => (
-              <Box key={i} sx={{ bgcolor: "#F7F2E6", height: 28, width: w, maxWidth: "100%" }} />
+              <Box key={i} sx={{ bgcolor: "var(--honya-foam)", height: 28, width: w, maxWidth: "100%" }} />
             ))}
           </Box>
         </Box>
@@ -113,10 +113,10 @@ function ProductDetail({ book, related }: { book: Book; related: Book[] }) {
         <Box sx={{ maxWidth: { xs: 480, md: "none" }, width: "100%" }}>
           <BookCover book={book} height={440} />
           <Box className="honya-wood" sx={{ height: 12 }} />
-          <Box sx={{ mt: 2, p: 2, bgcolor: "#F7F2E6", border: "1px solid rgba(22,32,46,0.2)" }}>
+          <Box sx={{ mt: 2, p: 2, bgcolor: "var(--honya-foam)", border: "1px solid var(--honya-line)" }}>
             <Typography variant="caption" sx={{ letterSpacing: "0.25em" }}>書誌 · COLOPHON</Typography>
             {colophon.map(([k, v]) => (
-              <Box key={k} sx={{ display: "flex", justifyContent: "space-between", py: 0.5, borderBottom: "1px dotted rgba(22,32,46,0.25)" }}>
+              <Box key={k} sx={{ display: "flex", justifyContent: "space-between", py: 0.5, borderBottom: "1px dotted var(--honya-line-strong)" }}>
                 <Typography variant="body2" color="text.secondary">{k}</Typography>
                 <Typography variant="body2" sx={{ fontWeight: 600 }}>{v}</Typography>
               </Box>
@@ -180,8 +180,8 @@ function ProductDetail({ book, related }: { book: Book; related: Book[] }) {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    bgcolor: "#F7F2E6",
-                    color: "#16202E",
+                    bgcolor: "var(--honya-foam)",
+                    color: "text.primary",
                     borderRadius: 1,
                     border: "1px solid rgba(247,242,230,0.4)",
                     overflow: "hidden",
@@ -228,12 +228,18 @@ function ProductDetail({ book, related }: { book: Book; related: Book[] }) {
             </Box>
           </Box>
           <Typography variant="caption" sx={{ display: "block", mt: 1.5, opacity: 0.65 }}>
-            Wrapped in washi + twine. Dummy checkout — no charge, only stamps.
+            Wrapped in washi + twine. Cash on delivery, settled at checkout.
           </Typography>
           {notice && (
-            <Typography variant="body2" role="status" sx={{ mt: 1 }}>
-              {notice}
-            </Typography>
+            <Box role="status" sx={{ mt: 1.5, display: "flex", gap: 1.5, alignItems: "center", flexWrap: "wrap" }}>
+              <Typography variant="body2">{notice}</Typography>
+              <Button component={RouterLink} to="/cart" size="small" variant="outlined">
+                View basket
+              </Button>
+              <Button component={RouterLink} to="/checkout" size="small" variant="contained" color="secondary">
+                Checkout
+              </Button>
+            </Box>
           )}
         </Box>
       </Box>

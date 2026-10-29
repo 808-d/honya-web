@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="10" fill="#B5402A"/>
   <rect x="5" y="5" width="54" height="54" rx="6" fill="none" stroke="#F7F2E6" stroke-opacity="0.4" stroke-width="1.5"/>
-  <text x="32" y="42" text-anchor="middle" font-family="Hiragino Mincho ProN, Yu Mincho, Noto Serif JP, serif" font-size="25" font-weight="bold" letter-spacing="2" fill="#F7F2E6">本屋</text>
+  <text x="32" y="29" text-anchor="middle" font-family="Hiragino Mincho ProN, Yu Mincho, Noto Serif JP, serif" font-size="22" font-weight="bold" fill="#F7F2E6">本</text>
+  <text x="32" y="52" text-anchor="middle" font-family="Hiragino Mincho ProN, Yu Mincho, Noto Serif JP, serif" font-size="22" font-weight="bold" fill="#F7F2E6">屋</text>
 </svg>

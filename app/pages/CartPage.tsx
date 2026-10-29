@@ -72,7 +72,7 @@ export default function CartPage() {
       {loading ? (
         <Typography variant="body2" color="text.secondary" sx={{ mt: 3 }}>Fetching your basket…</Typography>
       ) : items.length === 0 ? (
-        <Box sx={{ mt: 3, p: 4, textAlign: "center", border: "1px dashed rgba(22,32,46,0.4)", bgcolor: "#F7F2E6" }}>
+        <Box sx={{ mt: 3, p: 4, textAlign: "center", border: "1px dashed var(--honya-line-strong)", bgcolor: "var(--honya-foam)" }}>
           <ShoppingBasketIcon sx={{ fontSize: 40, opacity: 0.5 }} />
           <Typography variant="h6" sx={{ mt: 1 }}>Nothing in the basket yet.</Typography>
           <Typography variant="body2" color="text.secondary">Add a volume from the shelves and it will wait here.</Typography>
@@ -81,7 +81,7 @@ export default function CartPage() {
           </Button>
         </Box>
       ) : (
-        <Box sx={{ mt: 3, bgcolor: "#F7F2E6", border: "1px solid rgba(22,32,46,0.2)", boxShadow: "6px 6px 0 rgba(15,40,71,0.12)" }}>
+        <Box sx={{ mt: 3, bgcolor: "var(--honya-foam)", border: "1px solid var(--honya-line)", boxShadow: "6px 6px 0 var(--honya-shadow)" }}>
           {items.map((item, index) => (
             <Box key={item.id}>
               {index > 0 && <Divider />}
@@ -97,7 +97,7 @@ export default function CartPage() {
                     alignItems: "center",
                     justifyContent: "center",
                     overflow: "hidden",
-                    border: "1px solid rgba(22,32,46,0.25)",
+                    border: "1px solid var(--honya-line)",
                   }}
                 >
                   {item.cover ? (
@@ -136,7 +136,7 @@ export default function CartPage() {
       <Box sx={{ display: "flex", gap: 1.5, mt: 3, flexWrap: "wrap" }}>
         <Button component={RouterLink} to="/products" variant="outlined">Continue browsing</Button>
         {items.length > 0 && (
-          <Button component={RouterLink} to="/profile" variant="contained" color="primary">Go to my shelf</Button>
+          <Button component={RouterLink} to="/checkout" variant="contained" color="primary">Proceed to checkout</Button>
         )}
       </Box>
     </Container>

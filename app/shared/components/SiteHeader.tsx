@@ -21,9 +21,11 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import MenuIcon from "@mui/icons-material/Menu";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import FurinIcon from "./FurinIcon";
 import HonyaMark from "./HonyaMark";
+import ThemeToggle from "./ThemeToggle";
 import { useAuth } from "../../contexts/AuthContext";
 import { useCart } from "../../contexts/CartContext";
 import { dummyNotices } from "../../dummy_data/users";
@@ -47,7 +49,7 @@ export default function SiteHeader() {
   return (
     <Box sx={{ position: "sticky", top: 0, zIndex: 50 }}>
       <Box className="honya-seigaiha honya-drift" sx={{ height: 10 }} />
-      <AppBar position="static" elevation={0} sx={{ bgcolor: "#F7F2E6", color: "#16202E", borderBottom: "1px solid rgba(22,32,46,0.2)" }}>
+      <AppBar position="static" elevation={0} sx={{ bgcolor: "var(--honya-foam)", color: "var(--honya-ink)", borderBottom: "1px solid var(--honya-line)" }}>
         <Container maxWidth="lg">
           <Toolbar disableGutters sx={{ gap: 1.5, py: 1 }}>
             <IconButton
@@ -62,7 +64,7 @@ export default function SiteHeader() {
               to="/"
               sx={{ display: "flex", alignItems: "center", gap: 1.5, textDecoration: "none", color: "inherit" }}
             >
-              <HonyaMark size={34} sx={{ height: { xs: 32, sm: 34 }, fontSize: { xs: 12, sm: 13 }, px: 1, gap: "2px" }} />
+              <HonyaMark size={34} />
               <Box>
                 <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: "0.14em", lineHeight: 1, fontSize: { xs: "1rem", sm: "1.25rem" } }}>
                   HONYA
@@ -90,12 +92,27 @@ export default function SiteHeader() {
                   </Button>
                 );
               })}
+              {user && (
+                <Button
+                  component={RouterLink}
+                  to="/orders"
+                  size="small"
+                  variant={pathname.startsWith("/orders") ? "contained" : "text"}
+                  color={pathname.startsWith("/orders") ? "primary" : "inherit"}
+                  startIcon={<ReceiptLongIcon fontSize="small" />}
+                >
+                  My orders
+                </Button>
+              )}
             </Box>
 
             <Box sx={{ ml: "auto", display: "flex", alignItems: "center", gap: 0.5 }}>
               <Typography variant="caption" sx={{ display: { xs: "none", lg: "block" }, opacity: 0.65, letterSpacing: "0.12em", mr: 1 }}>
                 {user ? `@${user.username}` : ""}
               </Typography>
+              <Box sx={{ display: { xs: "none", sm: "inline-flex" } }}>
+                <ThemeToggle />
+              </Box>
               {/* Furin wind-chime notifications — Honya's answer to the bell */}
               <IconButton
                 className="furin-btn"
@@ -103,7 +120,7 @@ export default function SiteHeader() {
                 aria-haspopup="true"
                 aria-expanded={chimeOpen ? "true" : undefined}
                 onClick={(e) => setChimeAnchor(e.currentTarget)}
-                sx={{ color: "#0F2847" }}
+                sx={{ color: "text.primary" }}
               >
                 <Badge badgeContent={dummyNotices.length} color="secondary">
                   <FurinIcon className="furin-chime" />
@@ -115,7 +132,7 @@ export default function SiteHeader() {
                 onClose={() => setChimeAnchor(null)}
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
-                slotProps={{ paper: { sx: { width: 300, bgcolor: "#F7F2E6", border: "1px solid rgba(22,32,46,0.25)" } } }}
+                slotProps={{ paper: { sx: { width: 300, bgcolor: "background.paper", border: "1px solid var(--honya-line)" } } }}
               >
                 <Box sx={{ p: 2, pb: 1, display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
                   <Typography variant="overline" sx={{ letterSpacing: "0.25em" }}>風鈴 · NOTICES</Typography>
@@ -160,8 +177,15 @@ export default function SiteHeader() {
                     onClose={() => setAccountAnchor(null)}
                     anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                     transformOrigin={{ vertical: "top", horizontal: "right" }}
-                    slotProps={{ paper: { sx: { minWidth: 200, mt: 1, bgcolor: "#F7F2E6", border: "1px solid rgba(22,32,46,0.25)" } } }}
+                    slotProps={{ paper: { sx: { minWidth: 200, mt: 1, bgcolor: "background.paper", border: "1px solid var(--honya-line)" } } }}
                   >
+                    <MenuItem
+                      component={RouterLink}
+                      to="/orders"
+                      onClick={() => setAccountAnchor(null)}
+                    >
+                      My orders
+                    </MenuItem>
                     <MenuItem
                       component={RouterLink}
                       to="/profile"
@@ -212,6 +236,11 @@ export default function SiteHeader() {
               </ListItemButton>
             ))}
             {user ? (
+              <ListItemButton component={RouterLink} to="/orders">
+                <ListItemText primary="My orders" />
+              </ListItemButton>
+            ) : null}
+            {user ? (
               <ListItemButton component={RouterLink} to="/profile">
                 <ListItemText primary="My account" />
               </ListItemButton>
@@ -226,6 +255,13 @@ export default function SiteHeader() {
               </ListItemButton>
             )}
           </List>
+          <Box
+            onClick={(event) => event.stopPropagation()}
+            sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1, mt: 1, pt: 1.5, borderTop: "1px solid var(--honya-line)" }}
+          >
+            <Typography variant="body2">Color theme</Typography>
+            <ThemeToggle />
+          </Box>
         </Box>
       </Drawer>
     </Box>

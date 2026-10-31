@@ -7,7 +7,7 @@ export { useLogin, useRegister, useForgotPassword, useResetPassword, useVerifyRe
 export type { LoginInput, RegisterInput, ForgotInput, ResetInput, AuthState } from "./use-auth";
 export { useCartState } from "./use-cart";
 export type { CartState } from "./use-cart";
-export { useCheckout, useOrders, useOrder, useCancelOrder } from "./use-orders";
+export { useCheckout, useOrders, useOrder, useCancelOrder, useReceiveOrder } from "./use-orders";
 export type { OrderQuery } from "./use-orders";
 export { usePermissionsState } from "./use-permissions";
 export type { PermissionsState } from "./use-permissions";

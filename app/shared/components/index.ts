@@ -1,6 +1,7 @@
 export { default as FurinIcon } from "./FurinIcon";
 export { default as HonyaMark } from "./HonyaMark";
 export { default as ThemeToggle } from "./ThemeToggle";
+export { ConfirmDialog } from "./ConfirmDialog";
 export { default as SiteHeader } from "./SiteHeader";
 export { default as SiteFooter } from "./SiteFooter";
 export { default as BookCard, BookCover } from "./BookCard";

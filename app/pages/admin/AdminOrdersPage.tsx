@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link as RouterLink } from "react-router";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import MenuItem from "@mui/material/MenuItem";
 import TablePagination from "@mui/material/TablePagination";
@@ -79,6 +80,22 @@ export default function AdminOrdersPage() {
       ),
     },
     { key: "placed", label: "Placed", render: (order) => formatDate(order.create_time) },
+    {
+      key: "actions",
+      label: "",
+      align: "right",
+      render: (order) => (
+        <Button
+          component={RouterLink}
+          to={`/admin/orders/${order.id}`}
+          size="small"
+          variant="outlined"
+          sx={{ whiteSpace: "nowrap" }}
+        >
+          View detail
+        </Button>
+      ),
+    },
   ];
 
   return (

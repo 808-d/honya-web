@@ -8,11 +8,14 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import { useAuth } from "../contexts/AuthContext";
-import { useCancelOrder, useOrder } from "../hooks";
+import { useCancelOrder, useOrder, useReceiveOrder } from "../hooks";
+import { ConfirmDialog } from "../shared/components";
 import { formatDate, formatMoney } from "../lib/format";
 import {
   ORDER_STATUS_COLOR,
   PAYMENT_STATUS_COLOR,
+  canCancelOrder,
+  canConfirmReceipt,
   orderStatusLabel,
   paymentMethodLabel,
   paymentStatusLabel,
@@ -30,18 +33,41 @@ function MoneyRow({ label, value, strong }: { label: string; value: string; stro
   );
 }
 
+type OrderAction = "cancel" | "receive";
+
 function OrderView({ id }: { id: string }) {
   const { data: order, loading, error, refetch } = useOrder(id);
   const cancel = useCancelOrder();
-  const [cancelError, setCancelError] = useState<string | null>(null);
+  const receive = useReceiveOrder();
+  const [action, setAction] = useState<OrderAction | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
-  const handleCancel = async () => {
-    setCancelError(null);
+  const busy = cancel.loading || receive.loading;
+
+  const runAction = async () => {
+    if (!action) return;
+    setActionError(null);
+    setNotice(null);
     try {
-      await cancel.mutate(id);
+      if (action === "cancel") {
+        await cancel.mutate(id);
+        setNotice("Order cancelled. Stock has been returned to the shelves.");
+      } else {
+        await receive.mutate(id);
+        setNotice("Order marked as received. Enjoy the read.");
+      }
+      setAction(null);
       refetch();
     } catch (err) {
-      setCancelError(err instanceof Error ? err.message : "Could not cancel this order.");
+      setAction(null);
+      setActionError(
+        err instanceof Error
+          ? err.message
+          : action === "cancel"
+            ? "Could not cancel this order."
+            : "Could not confirm this order.",
+      );
     }
   };
 
@@ -69,22 +95,55 @@ function OrderView({ id }: { id: string }) {
     );
   }
 
-  return <OrderDetail order={order} cancelError={cancelError} cancelling={cancel.loading} onCancel={handleCancel} />;
+  return (
+    <>
+      <OrderDetail
+        order={order}
+        actionError={actionError}
+        notice={notice}
+        busy={busy}
+        onCancel={() => setAction("cancel")}
+        onReceive={() => setAction("receive")}
+      />
+      <ConfirmDialog
+        open={Boolean(action)}
+        title={action === "cancel" ? "Cancel this order?" : "Confirm you received this order?"}
+        confirmLabel={action === "cancel" ? "Cancel order" : "Confirm received"}
+        danger={action === "cancel"}
+        loading={busy}
+        onClose={() => {
+          if (!busy) setAction(null);
+        }}
+        onConfirm={() => void runAction()}
+      >
+        <Typography variant="body2">
+          {action === "cancel"
+            ? "The order will be cancelled, stock returned to the shelves, and any coupon released. This cannot be undone."
+            : "Confirm that the parcel arrived safely. The order will be marked completed and the cash-on-delivery payment recorded as paid."}
+        </Typography>
+      </ConfirmDialog>
+    </>
+  );
 }
 
 function OrderDetail({
   order,
-  cancelError,
-  cancelling,
+  actionError,
+  notice,
+  busy,
   onCancel,
+  onReceive,
 }: {
   order: OrderDto;
-  cancelError: string | null;
-  cancelling: boolean;
+  actionError: string | null;
+  notice: string | null;
+  busy: boolean;
   onCancel: () => void;
+  onReceive: () => void;
 }) {
   const items = order.items ?? [];
-  const canCancel = order.status === 0 && order.payment_status === 0;
+  const cancellable = canCancelOrder(order.status, order.payment_status);
+  const receivable = canConfirmReceipt(order.status);
 
   return (
     <Container maxWidth="lg" sx={{ py: { xs: 3, md: 5 }, px: { xs: 2, sm: 3 } }}>
@@ -197,21 +256,31 @@ function OrderDetail({
           </Box>
 
           <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>
-            <Button component={RouterLink} to="/orders" variant="contained" color="primary">
+            <Button component={RouterLink} to="/orders" variant="outlined">
               All orders
             </Button>
             <Button component={RouterLink} to="/products" variant="outlined">
               Keep browsing
             </Button>
-            {canCancel && (
-              <Button variant="outlined" color="secondary" onClick={onCancel} disabled={cancelling}>
-                {cancelling ? "Cancelling…" : "Cancel order"}
+            {receivable && (
+              <Button variant="contained" color="primary" onClick={onReceive} disabled={busy}>
+                {busy ? "Confirming…" : "Confirm received"}
+              </Button>
+            )}
+            {cancellable && (
+              <Button variant="outlined" color="secondary" onClick={onCancel} disabled={busy}>
+                {busy ? "Cancelling…" : "Cancel order"}
               </Button>
             )}
           </Box>
-          {cancelError && (
+          {notice && (
+            <Box role="status" sx={{ p: 1.5, border: "1px solid #4A5D4E", bgcolor: "rgba(74,93,78,0.1)" }}>
+              <Typography variant="body2" color="success.main">{notice}</Typography>
+            </Box>
+          )}
+          {actionError && (
             <Box role="alert" sx={{ p: 1.5, border: "1px solid #B5402A", bgcolor: "rgba(181,64,42,0.06)" }}>
-              <Typography variant="body2" color="secondary">{cancelError}</Typography>
+              <Typography variant="body2" color="secondary">{actionError}</Typography>
             </Box>
           )}
         </Box>

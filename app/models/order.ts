@@ -33,6 +33,18 @@ export function paymentMethodLabel(method: number): string {
   return PAYMENT_METHOD_LABEL[method] ?? "Unknown";
 }
 
+/** Customers may cancel before dispatch and while no payment has been collected. */
+export function canCancelOrder(status: number, paymentStatus: number): boolean {
+  const beforeDispatch = status === 0 || status === 1 || status === 2;
+  const notCollected = paymentStatus === 0 || paymentStatus === 2;
+  return beforeDispatch && notCollected;
+}
+
+/** Receipt can only be confirmed once the order is shipping. */
+export function canConfirmReceipt(status: number): boolean {
+  return status === 3;
+}
+
 export type OrderChipColor =
   | "default"
   | "primary"

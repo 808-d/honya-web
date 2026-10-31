@@ -13,7 +13,7 @@ import EditIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import { AdminPageHeader } from "../../shared/admin/AdminPageHeader";
 import { AdminTable, type AdminColumn } from "../../shared/admin/AdminTable";
-import { ConfirmDialog } from "../../shared/admin/ConfirmDialog";
+import { ConfirmDialog } from "../../shared/components";
 import { useAuth } from "../../contexts/AuthContext";
 import { useAdminProducts, useDeleteProduct } from "../../hooks";
 import { useRelations } from "../../hooks";

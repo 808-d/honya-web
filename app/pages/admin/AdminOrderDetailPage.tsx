@@ -7,7 +7,7 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { AdminPageHeader } from "../../shared/admin/AdminPageHeader";
-import { ConfirmDialog } from "../../shared/admin/ConfirmDialog";
+import { ConfirmDialog } from "../../shared/components";
 import { useAuth } from "../../contexts/AuthContext";
 import { useAdminOrder, useUpdateOrderPayment, useUpdateOrderStatus } from "../../hooks";
 import { formatDate, formatMoney } from "../../lib/format";

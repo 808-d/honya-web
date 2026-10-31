@@ -44,3 +44,9 @@ export function useCancelOrder() {
     honyaFetch<OrderDto>(`/orders/${encodeURIComponent(id)}/cancel`, { method: "POST" }),
   );
 }
+
+export function useReceiveOrder() {
+  return useAsyncMutation<string, OrderDto>((id) =>
+    honyaFetch<OrderDto>(`/orders/${encodeURIComponent(id)}/receive`, { method: "POST" }),
+  );
+}
